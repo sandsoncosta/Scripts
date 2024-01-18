@@ -1,9 +1,12 @@
 #!/bin/bash
 
+<<<<<<< HEAD
 # Simples script para conversão simples de algum formato de vídeo em mp4
 # O output do ffmpeg copia as mesmas características de áudio e vídeo do original
 # A conversão é recursiva na pasta
 
+=======
+>>>>>>> f885b05ed504c94910866b79954ad4f94c607102
 # Diretório de origem dos arquivos de vídeo
 diretorio_origem="/home/sandson/Downloads/Video/"
 
