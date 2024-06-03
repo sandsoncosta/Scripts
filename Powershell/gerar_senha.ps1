@@ -30,7 +30,21 @@ function Get-Senha {
         $length = 12
     }
 
-    $password = -join (1..$length | ForEach-Object { $allChars[(Get-Random -Minimum 0 -Maximum $allChars.Length)] })
+    $password = ""
+
+    # Adiciona pelo menos um caractere de cada grupo à senha
+    $password += $uppercase[(Get-Random -Minimum 0 -Maximum $uppercase.Length)]
+    $password += $lowercase[(Get-Random -Minimum 0 -Maximum $lowercase.Length)]
+    $password += $numbers[(Get-Random -Minimum 0 -Maximum $numbers.Length)]
+    $password += $specialChars[(Get-Random -Minimum 0 -Maximum $specialChars.Length)]
+
+    $remainingLength = $length - 4
+    $remainingPassword = -join (1..$remainingLength | ForEach-Object { $allChars[(Get-Random -Minimum 0 -Maximum $allChars.Length)] })
+
+    $password += $remainingPassword
+
+    # Embaralha a senha para torná-la mais aleatória
+    $password = ($password.ToCharArray() | Get-Random -Count $password.Length) -join ''
 
     return $password
 }
