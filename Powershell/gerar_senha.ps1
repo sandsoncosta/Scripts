@@ -8,8 +8,8 @@ function Get-Senha {
     $lowercase = "abcdefghijklmnopqrstuvwxyz"
     $numbers = "0123456789"
     $specialChars = "!@#$%^&*()-_=+[]{}|;:,.<>?/`~"
-    $allChars = $uppercase + $lowercase + $numbers + $specialChars
-
+    $default = $uppercase + $lowercase + $numbers + $specialChars
+    
     switch ($type) {
         "1" {$allChars = $numbers}
         "2" {$allChars = $uppercase}
@@ -18,8 +18,11 @@ function Get-Senha {
         "5" {$allChars = $uppercase + $numbers}
         "6" {$allChars = $lowercase + $numbers}
         "7" {$allChars = $uppercase + $lowercase + $numbers}
-        "8" {$allChars = $uppercase + $lowercase + $numbers + $specialChars}
-        default {Write-Host "Opção inválida. Gerando senha com letras, números e caracteres especiais." -ForegroundColor Red; $default}
+        "8" {$allChars = $default}
+        default {
+            Write-Host "Opção inválida. Gerando senha com letras, números e caracteres especiais." -ForegroundColor Red
+            $allChars = $default
+        }
     }
 
     if ($length -le 0) {
@@ -46,11 +49,12 @@ function Get-Escolha {
         Write-Host "8. Letras, números e caracteres especiais" -ForegroundColor Cyan
         Write-Host "0. Encerrar" -ForegroundColor Cyan
         $escolha = Read-Host "Digite o número correspondente à sua escolha"
-        $escolha = [int]$escolha  # Converter para número inteiro
         if ([string]::IsNullOrWhiteSpace($escolha)) {
             Write-Host "Nenhuma entrada fornecida. Por favor, insira uma escolha válida." -ForegroundColor Red
+            continue
         }
-        elseif ($escolha -notin $opcoesValidas) {
+        $escolha = [int]$escolha
+        if ($escolha -notin $opcoesValidas) {
             Write-Host "Opção inválida. Por favor, escolha uma opção válida." -ForegroundColor Red
         }
     } while ([string]::IsNullOrWhiteSpace($escolha) -or $escolha -notin $opcoesValidas)
@@ -66,7 +70,7 @@ function Gerar-Senha {
         $choice = Get-Escolha
         if ($choice -eq 0) {
             Write-Host "Encerrando o programa." -ForegroundColor Red
-            break  # Sai do loop e encerra a execução do programa
+            break
         }
         $length = Get-Tamanho-Senha
         $senha = Get-Senha -length $length -type $choice
